@@ -69,26 +69,26 @@ class Downloader:
     def _set_ytmusic_instance(self):
         self.ytmusic = YTMusic()
 
-def _set_ytdlp_options(self):
-    extractor_args = {}
-    if self.itag in PREMIUM_FORMATS:
-        # Para formatos premium: necesitamos web_music y PO Token
-        extractor_args["player_client"] = ["web_music"]
-        if self.po_token is not None:
-            extractor_args["po_token"] = [self.po_token]
-        # Si no hay PO Token, simplemente no se añade, pero no forzamos "missing_pot"
-    else:
-        # Para formatos gratuitos: usar cliente tv que no requiere PO Token
-        extractor_args["player_client"] = ["tv"]
-    self.ytdlp_options = {
-        "quiet": True,
-        "no_warnings": True,
-        "noprogress": self.silent,
-        "allowed_extractors": ["youtube", "youtube:tab"],
-        "extractor_args": {"youtube": extractor_args},
-    }
-    if self.cookies_path is not None:
-        self.ytdlp_options["cookiefile"] = str(self.cookies_path)
+    def _set_ytdlp_options(self):
+        extractor_args = {}
+        if self.itag in PREMIUM_FORMATS:
+            # Para formatos premium: necesitamos web_music y PO Token
+            extractor_args["player_client"] = ["web_music"]
+            if self.po_token is not None:
+                extractor_args["po_token"] = [self.po_token]
+            # Si no hay PO Token, simplemente no se añade, pero no forzamos "missing_pot"
+        else:
+            # Para formatos gratuitos: usar cliente tv que no requiere PO Token
+            extractor_args["player_client"] = ["tv"]
+        self.ytdlp_options = {
+            "quiet": True,
+            "no_warnings": True,
+            "noprogress": self.silent,
+            "allowed_extractors": ["youtube", "youtube:tab"],
+            "extractor_args": {"youtube": extractor_args},
+        }
+        if self.cookies_path is not None:
+            self.ytdlp_options["cookiefile"] = str(self.cookies_path)
 
     def _set_exclude_tags(self):
         self.exclude_tags = (
