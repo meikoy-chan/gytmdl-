@@ -17,9 +17,8 @@ from PIL import Image
 from yt_dlp import YoutubeDL
 from yt_dlp.extractor.youtube import YoutubeTabIE
 from ytmusicapi import YTMusic
-from .constants import PREMIUM_FORMATS
 
-from .constants import IMAGE_FILE_EXTENSION_MAP, MP4_TAGS_MAP
+from .constants import IMAGE_FILE_EXTENSION_MAP, MP4_TAGS_MAP, PREMIUM_FORMATS
 from .enums import CoverFormat, DownloadMode
 
 
@@ -34,7 +33,7 @@ class Downloader:
         itag: str = "140",
         download_mode: DownloadMode = DownloadMode.YTDLP,
         po_token: str = None,
-        cover_size: int = "16383",
+        cover_size: int = 16383,
         cover_format: CoverFormat = CoverFormat.PNG,
         cover_quality: int = 100,
         template_folder: str = "{album_artist}/{album}",
@@ -71,16 +70,31 @@ class Downloader:
 
     def _set_ytdlp_options(self):
         """
-        Configura yt-dlp para que use su comportamiento por defecto,
-        sin forzar clientes específicos que puedan causar DRM o PO Token.
+        Configura yt-dlp para que use el cliente web_music cuando se proporcionen
+        cookies o PO Token, simulando el comportamiento de YouTube Music en navegador.
         """
         self.ytdlp_options = {
             "quiet": True,
             "no_warnings": True,
             "noprogress": self.silent,
             "allowed_extractors": ["youtube", "youtube:tab"],
-            # NO forzamos "extractor_args" con "player_client" ni "po_token"
         }
+        
+        # Configurar extractor_args para usar web_music si hay cookies o PO Token
+        if self.cookies_path is not None or self.po_token is not None:
+            self.ytdlp_options["extractor_args"] = {
+                "youtube": {
+                    "player_client": ["web_music"],  # Forzar uso de web_music
+                }
+            }
+            
+            # Añadir PO Token si está disponible - Formato correcto: web_music.gvs+TOKEN
+            if self.po_token is not None:
+                self.ytdlp_options["extractor_args"]["youtube"]["po_token"] = [
+                    f"web_music.gvs+{self.po_token}"
+                ]
+        
+        # Añadir cookies si están disponibles
         if self.cookies_path is not None:
             self.ytdlp_options["cookiefile"] = str(self.cookies_path)
 
