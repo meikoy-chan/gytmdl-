@@ -311,19 +311,74 @@ class Downloader:
         return final_path.parent / ("Cover" + file_extension)
 
     def get_final_path(self, tags: dict) -> Path:
+    # Crear una copia de tags para manipular sin afectar los originales
+        tags_for_filename = tags.copy()
+    
+    # Convertir valores numéricos a enteros para formateo correcto
+        numeric_keys = ['track', 'track_total', 'disc', 'disc_total']
+        for key in numeric_keys:
+            if key in tags_for_filename:
+                value = tags_for_filename[key]
+                try:
+                # Si es string, intentar convertir a entero
+                    if isinstance(value, str):
+                    # Si tiene formato "0/1", tomar solo la primera parte
+                        if '/' in value:
+                            value = value.split('/')[0]
+                        tags_for_filename[key] = int(value)
+                    elif value is None:
+                        tags_for_filename[key] = 0
+                # Si ya es número, mantenerlo
+                except (ValueError, TypeError):
+                # Si falla la conversión, usar 0
+                    tags_for_filename[key] = 0
+                    print(f"Advertencia: No se pudo convertir {key}='{value}' a entero, usando 0")
+    
+    # Asegurar valores por defecto para campos críticos
+        tags_for_filename.setdefault('track', 0)
+        tags_for_filename.setdefault('title', 'Unknown Title')
+        tags_for_filename.setdefault('artist', 'Unknown Artist')
+    
+    # DEBUG opcional
+        print(f"DEBUG - track para nombre: {tags_for_filename.get('track')} (tipo: {type(tags_for_filename.get('track'))})")
+    
+    # Dividir plantillas
         final_path_folder = self.template_folder.split("/")
         final_path_file = self.template_file.split("/")
-        final_path_folder = [
-            self.get_sanitized_string(i.format(**tags), True) for i in final_path_folder
-        ]
-        final_path_file = [
-            self.get_sanitized_string(i.format(**tags), True)
-            for i in final_path_file[:-1]
-        ] + [
-            self.get_sanitized_string(final_path_file[-1].format(**tags), False)
-            + ".m4a"
-        ]
-        return self.output_path.joinpath(*final_path_folder).joinpath(*final_path_file)
+    
+    # Procesar carpetas
+        processed_folders = []
+        for folder_part in final_path_folder:
+            try:
+                formatted = folder_part.format(**tags_for_filename)
+            except (KeyError, ValueError) as e:
+                print(f"DEBUG - Error formateando carpeta '{folder_part}': {e}")
+                formatted = folder_part
+            processed_folders.append(self.get_sanitized_string(formatted, True))
+    
+    # Procesar partes del archivo (excepto la última)
+        processed_file_parts = []
+        for file_part in final_path_file[:-1]:
+            try:
+                formatted = file_part.format(**tags_for_filename)
+            except (KeyError, ValueError) as e:
+                print(f"DEBUG - Error formateando parte '{file_part}': {e}")
+                formatted = file_part
+            processed_file_parts.append(self.get_sanitized_string(formatted, True))
+    
+    # Procesar última parte (nombre del archivo)
+        try:
+            last_part = final_path_file[-1].format(**tags_for_filename)
+        except (KeyError, ValueError) as e:
+            print(f"DEBUG - Error formateando última parte '{final_path_file[-1]}': {e}")
+            last_part = final_path_file[-1]
+    
+    # Añadir extensión y sanitizar
+        final_filename = self.get_sanitized_string(last_part, False) + ".m4a"
+        processed_file_parts.append(final_filename)
+    
+    # Construir y devolver ruta completa
+        return self.output_path.joinpath(*processed_folders).joinpath(*processed_file_parts)
 
     def download(self, video_id: str, temp_path: Path):
         with YoutubeDL(
