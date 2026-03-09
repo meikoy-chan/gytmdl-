@@ -17,8 +17,8 @@ A command-line app for downloading YouTube Music songs with tags from YouTube Mu
 * **FFmpeg** on your system PATH.
   * **Windows**: Download from [AnimMouse's FFmpeg Builds](https://github.com/AnimMouse/ffmpeg-stable-autobuild/releases).
   * **Linux**: Download from [John Van Sickle's FFmpeg Builds](https://johnvansickle.com/ffmpeg/).
-* **Deno** in your system:
-  * **Windows**
+* **Deno** installed in your system:
+  * **Windows**: Copy and execute in terminal of PowerShell this command.
 ```bash
  irm "https://deno.land/install.ps1" | iex
 ```
