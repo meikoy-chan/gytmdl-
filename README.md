@@ -17,7 +17,7 @@ A command-line app for downloading YouTube Music songs with tags from YouTube Mu
 * **FFmpeg** on your system PATH.
   * **Windows**: Download from [AnimMouse's FFmpeg Builds](https://github.com/AnimMouse/ffmpeg-stable-autobuild/releases).
   * **Linux**: Download from [John Van Sickle's FFmpeg Builds](https://johnvansickle.com/ffmpeg/).
-* (Optional) The **cookies file** of your YouTube Music browser session in Netscape format (requires an active subscription).
+* **cookies file** of your YouTube Music browser session in Netscape format (requires an active subscription).
   * **Firefox**: Use the [Export Cookies](https://addons.mozilla.org/addon/export-cookies-txt) extension.
   * **Chromium-based Browsers**: Use the [Open Cookies.txt](https://chromewebstore.google.com/detail/open-cookiestxt/gdocmgbfkjnnpapoeobnolbbkoibbcif) extension.
   * With cookies, you can download **age-restricted content**, **private playlists**, and songs in **premium formats** if you have an active Premium subscription. You'll have to set the cookies file path using the command line arguments or the config file (see [Configuration](#configuration)).
