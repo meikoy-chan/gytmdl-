@@ -16,7 +16,6 @@ A command-line app for downloading YouTube Music songs with tags from YouTube Mu
 * **Python 3.10 or higher** installed on your system.
 * **FFmpeg** on your system PATH.
   * **Windows**: Download from [AnimMouse's FFmpeg Builds](https://github.com/AnimMouse/ffmpeg-stable-autobuild/releases).
-  * **Linux**: Download from [John Van Sickle's FFmpeg Builds](https://johnvansickle.com/ffmpeg/).
 * **Deno** installed in your system:
   * **Windows**: Copy and execute in terminal of PowerShell this command.
     ```bash
