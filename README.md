@@ -25,7 +25,7 @@ A command-line app for downloading YouTube Music songs with tags from YouTube Mu
 
 * **cookies file** of your YouTube Music browser session in Netscape format (requires an active subscription).
   * **Firefox**: Use the [Export Cookies](https://addons.mozilla.org/addon/export-cookies-txt) extension.
-  * **Chromium-based Browsers**: Use the [Open Cookies.txt](https://chromewebstore.google.com/detail/open-cookiestxt/gdocmgbfkjnnpapoeobnolbbkoibbcif) extension.
+  * **Chromium-based Browsers**: Use the [Get cookies.txt LOCALLY](https://chromewebstore.google.com/detail/cclelndahbckbenkjhflpdbgdldlbecc?utm_source=item-share-cb) extension.
   * With cookies, you can download **age-restricted content**, **private playlists**, and songs in **premium formats** if you have an active Premium subscription. You'll have to set the cookies file path using the command line arguments or the config file (see [Configuration](#configuration)).
   * **YouTube cookies can expire very quickly**. As a workaround, export your cookies in an incognito/anonymous window so they don't expire as quickly.
   * **You may need to provide a PO token** by using the command line arguments or the config file if you encounter issues when downloading with cookies. To get a PO token, you can follow yt-dlp's instructions [here](https://github.com/yt-dlp/yt-dlp/wiki/PO-Token-Guide).
