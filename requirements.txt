@@ -5,3 +5,4 @@ mutagen
 pillow
 yt-dlp
 ytmusicapi
+yt_dlp_ejs
